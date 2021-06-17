@@ -5,19 +5,24 @@ from sklearn.metrics import r2_score
 import pandas as pd
 import numpy as np
 
+#debug myadd
+from matplotlib.collections import PolyCollection
+
 df_temp = pd.read_csv(f'./temp_pressure.csv')
 lr = LinearRegression()  # 線形回帰用クラス
 X = df_temp[['altitude']].values  # 説明変数(標高)
 y = df_temp[['pressure']].values  # 目的変数(気圧)
+
 lr.fit(X, y)  # 線形回帰実施
 plt.scatter(X, y, color = 'blue')  # 説明変数と目的変数のデータ点の散布図をプロット
 plt.plot(X, lr.predict(X), color = 'red')
 plt.xlabel('altitude [m]')  # x軸のラベル
 plt.ylabel('pressure [hPa]')  # y軸のラベル
 plt.text(1000, 700, f'r2={r2_score(y, lr.predict(X))}')  # R2乗値を表示
+plt.show()
 
-# %% 1-2-A) 標高と気温で線形回帰
-X = df_temp[['altitude']].values  # 説明変数(標高)
+
+# %% 1-2-A) 標高と気温で線形回帰X = df_temp[['altitude']].values  # 説明変数(標高)
 y = df_temp[['temperature']].values  # 目的変数(気温)
 lr.fit(X, y)
 plt.scatter(X, y, color = 'blue')
@@ -25,6 +30,7 @@ plt.plot(X, lr.predict(X), color = 'red')
 plt.xlabel('altitude [m]')
 plt.ylabel('temperature [°C]')
 plt.text(1000, 0, f'r2={r2_score(y, lr.predict(X))}')  # R2乗値を表示
+plt.show()
 
 # %% 1-2-A) 緯度と気温で線形回帰
 X = df_temp[['latitude']].values  # 説明変数(緯度)
@@ -35,13 +41,21 @@ plt.plot(X, lr.predict(X), color = 'red')
 plt.xlabel('latitude [°]')
 plt.ylabel('temperature [°C]')
 plt.text(35, 10, f'r2={r2_score(y, lr.predict(X))}')  # R2乗値を表示
+plt.show()
 
 # %% 1-2-A) 予測値と実測値
 import seaborn as sns
-sns.regplot(lr.predict(X), y, ci=0, scatter_kws={'color':'blue'})  # 目的変数の予測値と実測値をプロット
+X = df_temp[['latitude']].values  # 説明変数(緯度)
+y = df_temp[['temperature']].values  # 目的変数(気温)
+print(df_temp.columns)
+lr.fit(X, y)
+df = pd.DataFrame([[lr.predict(X)], [y]])
+plt.scatter(X, y)
+sns.regplot(X, y, data=df, ci=0, scatter_kws={'color':'blue'}, line_kws={'color':'blue'})  # 目的変数の予測値と実測値をプロット
 plt.xlabel('pred_value [°C]')  # 予測値
 plt.ylabel('true_value [°C]')  # 実測値
 plt.text(0, -10, f'r2={r2_score(y, lr.predict(X))}')  # R2乗値を表示
+plt.show()
 
 # %% 1-2-A) 2次元説明変数を3次元プロット
 from mpl_toolkits.mplot3d import Axes3D
@@ -53,13 +67,18 @@ ax.scatter3D(X[:, 0], X[:, 1], y)
 ax.set_xlabel('altitude [m]')
 ax.set_ylabel('latitude [°]')
 ax.set_zlabel('temperature [°C]')
+plt.show()
 
 # %% 1-2-A) 予測値と実測値
+import seaborn as sns
+X = df_temp[['altitude', 'latitude']].values  # 説明変数(標高+緯度)
+y = df_temp[['temperature']].values  # 目的変数(気温)
 lr.fit(X, y)  # 線形回帰実施
 sns.regplot(lr.predict(X), y, ci=0, scatter_kws={'color':'blue'})  # 目的変数の予測値と実測値をプロット
 plt.xlabel('pred_value [°C]')
 plt.ylabel('true_value [°C]')
-plt.text(0, -10, f'r2={r2_score(y, lr.predict(X))}')  # R2乗値を表示
+#plt.text(0, -10, f'r2={r2_score(y, lr.predict(X))}')  # R2乗値を表示 #debug
+plt.show()
 
 # %% 1-2-B) 動物の身長と体重
 df_animal = pd.read_csv(f'./animal_size.csv')
@@ -68,8 +87,10 @@ y = df_animal[['weight']].values  # 目的変数(体重)
 plt.scatter(X, y, color = 'blue')  # 説明変数と目的変数のデータ点の散布図をプロット
 plt.xlabel('body_length [cm]')
 plt.ylabel('weight [kg]')
+plt.show()
 
 # %% 1-2-B) 線形回帰
+df_animal = pd.read_csv(f'./animal_size.csv')
 df_animal = df_animal[df_animal['name'] != 'Giraffe']  # キリンを除外
 df_animal = df_animal.sort_values('body_length')  # 表示用に体長でソート
 X = df_animal[['body_length']].values  # 説明変数(体長)
@@ -80,6 +101,7 @@ plt.plot(X, lr.predict(X), color = 'red')
 plt.xlabel('body_length [cm]')
 plt.ylabel('weight [kg]')
 plt.text(350, 1000, f'r2={r2_score(y, lr.predict(X))}')  # R2乗値を表示
+plt.show()
 
 # %% 1-2-B) 3次式で回帰
 from scipy.optimize import curve_fit
@@ -95,8 +117,10 @@ plt.plot(X_add, pred_y_add, color = 'red')  # 回帰線のプロット
 plt.xlabel('body_length [cm]')
 plt.ylabel('weight [kg]')
 plt.text(400, 1000, f'r2={r2_score(y, pred_y)}')  # R2乗値を表示
+plt.show()
 
 # %% 1-3) SVMでGamma変化
+import seaborn as sns
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from mlxtend.plotting import plot_decision_regions

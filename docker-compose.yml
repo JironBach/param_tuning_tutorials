@@ -1,0 +1,38 @@
+version: '3.7'
+services:
+  app: &app
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    command: >
+      bash -c "rm -f tmp/pids/* &&
+      bundle exec foreman start"
+    volumes:
+      - .:/myapp
+      - node_modules:/myapp/node_modules
+      - bundle:/myapp/vendor/bundle
+      - ~/.ssh:/root/.ssh:ro
+    ports:
+      - "43010:3000"
+      - "3035:3035"
+    depends_on:
+      - db
+      - redis
+    stdin_open: true
+    tty: true
+  db:
+    image: mysql:5.7
+    volumes:
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - db_data:/var/lib/mysql
+    ports:
+      - "43316:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      TZ: Asia/Tokyo
+  redis:
+    image: redis:latest
+volumes:
+  db_data:
+  node_modules:
+  bundle:
