@@ -206,6 +206,7 @@ if len(sys.argv) < 2:
     print('線形回帰２ or linear_regression2')
     print('３次式で回帰 or dimention3_regression')
     print('SVMでGamma変化 or svm_gamma')
+    print('all（全部）')
     sys.exit()
 
 prm = sys.argv[1]
@@ -229,6 +230,17 @@ elif prm == '３次式で回帰' or prm == 'dimention3_regression':
     dimention3_regression()
 elif prm == 'SVMでGamma変化' or prm == 'svm_gamma':
     svm_gamma()
+elif prm == 'all':
+    linear_regression()
+    altitude_temparature_linear_regression()
+    latitude_temperature_linear_regression()
+    prediction_measurement()
+    dimention2_var_dimention3_plot()
+    prediction_measurement2()
+    animals_height_weight()
+    linear_regression2()
+    dimention3_regression()
+    svm_gamma()
 else:
     print('usage : パラメータ')
     print('線形回帰 or linear_regression')
@@ -241,6 +253,7 @@ else:
     print('線形回帰２ or linear_regression2')
     print('３次式で回帰 or dimention3_regression')
     print('SVMでGamma変化 or svm_gamma')
+    print('all（全部）')
     sys.exit()
 
 '''
