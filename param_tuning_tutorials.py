@@ -130,9 +130,7 @@ def dimention3_regression():
     df_temp, lr = load_data()
     # df_tempの２重配列がよく分からない
     #X = df_temp[['altitude', 'latitude']].values  # 説明変数(標高+緯度)
-    #y = df_temp[['temperature']].values  # 目的変数(気温)
     X = df_temp[['altitude']].values  # 説明変数(標高)
-    #y = df_temp[['pressure']].values  # 目的変数(気圧)
     y = df_temp[['temperature']].values  # 目的変数(気圧)
     def cubic_fit(x, a):  # 回帰用方程式
         Y = a * x **3
